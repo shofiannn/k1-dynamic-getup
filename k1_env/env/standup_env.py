@@ -28,7 +28,7 @@ class StandupEnv(gymnasium.Env):
             "render_realtime": True,
             # Target robot state (q_motors, tilt) [rad^6]
             # [elbow, shoulder_pitch, hip_pitch, knee, ankle_pitch, IMU_pitch]
-            "desired_state": np.deg2rad([-49.5, 19.5, -52, 79, -36.5, 8.5]),
+            "desired_state": np.deg2rad([0, 0, -28.6, 57.3, -28.6, 0]),
             # Probability of seeding the robot in finale position
             "reset_final_p": 0.1,
             # Termination conditions
@@ -396,7 +396,7 @@ class StandupEnv(gymnasium.Env):
         if target:
             initial_tilt = my_target[-1]
         T_world_trunk = tf.rotation_matrix(initial_tilt, [0, 1, 0])
-        T_world_trunk[:3, 3] = [0, 0, 0.8]
+        T_world_trunk[:3, 3] = [0, 0, 0.55 if target else 0.8]
         self.sim.set_T_world_site("trunk", T_world_trunk)
 
         # Wait for the robot to stabilize
