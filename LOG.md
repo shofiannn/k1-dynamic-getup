@@ -7,4 +7,4 @@
 - reward_check: target 0,9-1,0 | prone 0,15-0,25 | supine 0,25 | tanda tilt +90
 - Data awal: prone ~1745, supine ~1285 (uji: 349 dan 257)
 - JAX: CPU di training uji pertama (fps rata-rata 43), GPU aktif sesudah pasang jax[cuda12]
-- fps GPU: (isi setelah uji)
+- fps GPU (sesudah belajar mulai, hitung dari selisih tabel): sekitar 20; rata-rata di tabel (75-83) menyesatkan karena termasuk fase acak
