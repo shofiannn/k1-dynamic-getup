@@ -41,3 +41,8 @@
 ## Fase E: video demo, README, laporan, pengumpulan (Jumat 20 Nov - Selasa 24 Nov)
 - (belum ada catatan)
 - 19 Nov: reset pose target (use_cache=False) goyah: berdiri 19/30 pada tinggi lepas 0,55 m dan 10/30 pada 0,50 m. Tidak berdampak pada training/evaluasi karena keduanya memakai posisi awal dari berkas (cache). Dipertahankan 0,55 m.
+
+## C9-C11: evaluasi A1 seed 0 (19 Nov)
+- C9: prone 0/30, supine 0/30 (dev, H=0.494).
+- C11: kedua posisi kategori C (terjebak): robot naik ke duduk tegak <1 detik lalu diam. Hipotesis: optimum lokal akibat bonus tinggi/ketegakan A1 (belum dibuktikan; bandingkan dengan A0).
+rantai dimulai: Thu Nov 19 07:55:19 PM WIB 2026
