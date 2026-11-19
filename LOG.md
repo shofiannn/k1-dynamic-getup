@@ -40,3 +40,4 @@
 
 ## Fase E: video demo, README, laporan, pengumpulan (Jumat 20 Nov - Selasa 24 Nov)
 - (belum ada catatan)
+- 19 Nov: reset pose target (use_cache=False) goyah: berdiri 19/30 pada tinggi lepas 0,55 m dan 10/30 pada 0,50 m. Tidak berdampak pada training/evaluasi karena keduanya memakai posisi awal dari berkas (cache). Dipertahankan 0,55 m.
