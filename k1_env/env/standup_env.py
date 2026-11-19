@@ -5,6 +5,7 @@ import warnings
 from typing import Optional
 
 import gymnasium
+import mujoco
 import numpy as np
 from gymnasium import spaces
 
@@ -54,6 +55,15 @@ class StandupEnv(gymnasium.Env):
             "dtilt_delay": 0.050,
             # Previous actions
             "previous_actions": 1,
+            # --- Fase C (semua mati secara bawaan) ---
+            "reg_ramp_steps": 0,    # >0: bonus kehalusan naik 0 -> 1 selama sekian langkah total
+            "n_envs_hint": 16,      # jumlah env paralel, untuk memperkirakan langkah total
+            "easy_start_steps": 0,  # >0: kurikulum posisi awal selama sekian langkah total
+            "easy_start_frac": 0.5, # peluang awal memakai posisi mudah (duduk/berlutut)
+            "posture": "both",      # "both", "prone", atau "supine"
+            "height_bonus": 0.0,    # bobot bonus tinggi badan (padat)
+            "upright_bonus": 0.0,   # bobot bonus ketegakan badan (padat)
+            "target_height": 0.5,   # tinggi badan saat berdiri (dari reward_check.py)
         }
         self.options.update(options or {})
 
@@ -165,6 +175,37 @@ class StandupEnv(gymnasium.Env):
             with open(initial_config_path, "rb") as f:
                 self.initial_config = pickle.load(f)
 
+        # --- Fase C ---
+        self.total_steps = 0
+        self.reg_scale = 1.0
+        self.easy_config = None
+        easy_path = initial_config_path.replace('.pkl', '_easy.pkl')
+        if os.path.exists(easy_path):
+            with open(easy_path, 'rb') as f:
+                self.easy_config = pickle.load(f)
+        if self.initial_config is not None and self.options['posture'] != 'both':
+            self.initial_config = self._filter_posture(self.initial_config, self.options['posture'])
+
+    def _filter_posture(self, configs, posture):
+        kept = []
+        for qpos, ctrl in configs:
+            self.sim.data.qpos[:] = qpos
+            self.sim.data.qvel[:] = 0
+            mujoco.mj_forward(self.sim.model, self.sim.data)
+            tilt = np.rad2deg(self.get_tilt())
+            if (posture == 'prone' and tilt > 60) or (posture == 'supine' and tilt < -60):
+                kept.append([qpos, ctrl])
+        return kept
+
+    def _pick_pool(self):
+        steps = self.total_steps * self.options['n_envs_hint']
+        ramp = self.options['easy_start_steps']
+        if self.easy_config and ramp > 0 and steps < ramp:
+            p_easy = self.options['easy_start_frac'] * (1.0 - steps / ramp)
+            if self.np_random.random() < p_easy:
+                return self.easy_config
+        return self.initial_config
+
     def get_initial_config_filename(self) -> str:
         return os.path.join(os.path.dirname(os.path.realpath(__file__)), "standup_initial_configurations.pkl")
 
@@ -210,6 +251,10 @@ class StandupEnv(gymnasium.Env):
 
     def step(self, action):
         action = np.array(action)
+
+        self.total_steps += 1
+        ramp = self.options['reg_ramp_steps']
+        self.reg_scale = 1.0 if ramp <= 0 else min(1.0, self.total_steps * self.options['n_envs_hint'] / ramp)
 
         # Current control
         start_ctrl = [self.sim.get_control(f"left_{dof}") for dof in self.dofs]
@@ -302,22 +347,30 @@ class StandupEnv(gymnasium.Env):
             reward += np.exp(-np.linalg.norm(ctrl_velocity)) * 1e-1
 
             # Penalizing action variation
-            reward += np.exp(-np.linalg.norm(action_variation)) * 5e-2
+            reward += np.exp(-np.linalg.norm(action_variation)) * 5e-2 * self.reg_scale
         elif self.options["control"] == "velocity":
             # Penalizing action
-            reward += np.exp(-np.linalg.norm(action)) * 1e-1
+            reward += np.exp(-np.linalg.norm(action)) * 1e-1 * self.reg_scale
 
             # Penalizing action variation
-            reward += np.exp(-np.linalg.norm(action_variation)) * 5e-2
+            reward += np.exp(-np.linalg.norm(action_variation)) * 5e-2 * self.reg_scale
         elif self.options["control"] == "error":
             # Penalizing action
-            reward += np.exp(-np.linalg.norm(action)) * 1e-1
+            reward += np.exp(-np.linalg.norm(action)) * 1e-1 * self.reg_scale
 
             # Penalizing action variation
-            reward += np.exp(-np.linalg.norm(action_variation)) * 5e-2
+            reward += np.exp(-np.linalg.norm(action_variation)) * 5e-2 * self.reg_scale
 
         # No self collisions reward
         reward += np.exp(-self.sim.self_collisions()) * 1e-1
+
+        # --- Fase C: bonus padat (bobot 0 = mati) ---
+        if self.options['height_bonus'] > 0:
+            h = self.trunk_site.xpos[2] / self.options['target_height']
+            reward += self.options['height_bonus'] * min(1.0, max(0.0, h))
+        if self.options['upright_bonus'] > 0:
+            tilt_err = self.tilt_history[-1] - self.options['desired_state'][-1]
+            reward += self.options['upright_bonus'] * 0.5 * (1.0 + np.cos(tilt_err))
 
         # Terminating the episode after the trucate_duration
         terminated = self.sim.t > self.options["truncate_duration"]
@@ -421,7 +474,7 @@ class StandupEnv(gymnasium.Env):
 
         # Initial robot configuration
         if use_cache and self.initial_config is not None:
-            qpos, ctrl = random.choice(self.initial_config)
+            qpos, ctrl = random.choice(self._pick_pool())
             self.sim.data.qpos = qpos
             self.sim.data.ctrl = ctrl
             self.sim.data.qvel *= 0
