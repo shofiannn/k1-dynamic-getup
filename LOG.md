@@ -46,3 +46,13 @@
 - C9: prone 0/30, supine 0/30 (dev, H=0.494).
 - C11: kedua posisi kategori C (terjebak): robot naik ke duduk tegak <1 detik lalu diam. Hipotesis: optimum lokal akibat bonus tinggi/ketegakan A1 (belum dibuktikan; bandingkan dengan A0).
 rantai dimulai: Thu Nov 19 07:55:19 PM WIB 2026
+run panjang A1 (6M langkah, seed 0) dimulai: Fri Nov 20 07:52:11 AM WIB 2026
+A0 dev: prone 0/30, supine 0/30 (1M langkah, H=0.494)
+C2 (kurikulum posisi mudah, 1.2M langkah, ramp 800k, seed 0) dimulai: Fri Nov 20 01:07:16 PM WIB 2026. a1_long 6M: prone 0/30, supine 0/30 (best dan final)
+C2 dev: 0/30 dan 0/30; diagnosis: z_maks 0.12-0.16 m (ambang 0.42), bahkan dari posisi mudah. C3 (height_bonus=1.5, upright_bonus=0, 1.2M) dimulai: Fri Nov 20 03:39:18 PM WIB 2026
+C3 (height 1.5, upright 0, 1.2M): z_maks supine 0.47-0.48 tapi tilt -57..-67; prone z 0.26 tilt 129 (tinggi tanpa tegak). C4 (height 1.0, upright 1.0, 2M) dimulai: Fri Nov 20 10:50:36 PM WIB 2026
+
+## Evaluasi final D3 (22 Nov)
+- 100 posisi uji per postur (data uji dari indeks 30), H=0.494, model akhir tiap run.
+- final_s0, final_s1, final_s2 (A1, 1M), a0_s0 (A0, 1M), a1_long_6M, c2_s0 (kurikulum posisi mudah), c3_s0 (height 1.5), c4_s0 (height 1.0 + upright 1.0): semuanya 0/100 prone dan 0/100 supine (CI95 0.0-3.7%).
+- Diagnosis: robot belajar duduk tegak (z_maks 0.12-0.17 m, ambang berdiri 0.42 m). C3 menaikkan z sampai 0.47 m pada supine tetapi dengan tubuh miring (tilt -57 sampai -67 derajat).
