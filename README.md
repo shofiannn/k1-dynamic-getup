@@ -60,3 +60,9 @@ Dari folder repo, dengan venv aktif:
 - HumanUP (He dkk., 2025), arXiv:2502.12152
 - Booster Gym (Wang dkk., 2025), arXiv:2506.15132
 - CrossQ (Bhatt dkk., ICLR 2024)
+
+## Catatan kontrol (dari kode)
+
+- Lima sendi sagital dikendalikan: siku, bahu, pinggul, lutut, pergelangan kaki (pitch). Perintah dari sisi kiri dicerminkan ke kanan.
+- Mode kontrol: kecepatan sendi, batas 2 pi rad/detik, langkah 0,05 detik (perubahan maksimum 0,314 rad per langkah).
+- Sendi roll dan yaw tidak dikendalikan.
