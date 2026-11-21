@@ -63,6 +63,7 @@ class StandupEnv(gymnasium.Env):
             "posture": "both",      # "both", "prone", atau "supine"
             "height_bonus": 0.0,    # bobot bonus tinggi badan (padat)
             "upright_bonus": 0.0,   # bobot bonus ketegakan badan (padat)
+            "upright_gate": False,  # True: bonus tegak dikalikan fraksi tinggi
             "target_height": 0.5,   # tinggi badan saat berdiri (dari reward_check.py)
         }
         self.options.update(options or {})
@@ -370,7 +371,10 @@ class StandupEnv(gymnasium.Env):
             reward += self.options['height_bonus'] * min(1.0, max(0.0, h))
         if self.options['upright_bonus'] > 0:
             tilt_err = self.tilt_history[-1] - self.options['desired_state'][-1]
-            reward += self.options['upright_bonus'] * 0.5 * (1.0 + np.cos(tilt_err))
+            gate = 1.0
+            if self.options['upright_gate']:
+                gate = min(1.0, max(0.0, self.trunk_site.xpos[2] / self.options['target_height']))
+            reward += self.options['upright_bonus'] * gate * 0.5 * (1.0 + np.cos(tilt_err))
 
         # Terminating the episode after the trucate_duration
         terminated = self.sim.t > self.options["truncate_duration"]
