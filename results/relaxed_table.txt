@@ -10,3 +10,9 @@ supine: ketat 0/100 | longgar(tilt<45) 0/100 | median waktu longgar nan s
 == c5_s0
  prone: ketat 0/100 | longgar(tilt<45) 93/100 | median waktu longgar 2.40 s
 supine: ketat 0/100 | longgar(tilt<45) 77/100 | median waktu longgar 1.45 s
+== c5_s1
+ prone: ketat 1/100 | longgar(tilt<45) 1/100 | median waktu longgar 0.75 s
+supine: ketat 0/100 | longgar(tilt<45) 0/100 | median waktu longgar nan s
+== c5_s2
+ prone: ketat 88/100 | longgar(tilt<45) 88/100 | median waktu longgar 2.65 s
+supine: ketat 95/100 | longgar(tilt<45) 95/100 | median waktu longgar 1.45 s

@@ -58,3 +58,8 @@ C3 (height 1.5, upright 0, 1.2M): z_maks supine 0.47-0.48 tapi tilt -57..-67; pr
 - Diagnosis: robot belajar duduk tegak (z_maks 0.12-0.17 m, ambang berdiri 0.42 m). C3 menaikkan z sampai 0.47 m pada supine tetapi dengan tubuh miring (tilt -57 sampai -67 derajat).
 C5 (height 1.0, upright 2.0 digating tinggi, posisi mudah, 2M) dimulai: Sun Nov 22 12:49:53 AM WIB 2026
 C5 seed 0 dev: ketat 0/30; final longgar (tilt<45): prone 93/100, supine 77/100. Rantai C5 seed 1 dan 2 dimulai: Sun Nov 22 01:08:39 PM WIB 2026
+
+## C5 tiga seed (22 Nov)
+- Final (100 posisi/postur), ketat: seed 0: 0/100 dan 0/100 (longgar 93 dan 77); seed 1: 1/100 dan 0/100; seed 2: 88/100 (median 2.65 s) dan 95/100 (median 1.45 s).
+- Dev (30): seed 2 ketat 25/30 dan 28/30; seed 0 longgar 27/30 dan 27/30; seed 1 0/30.
+- Variasi antar seed besar. Video: docs/demo_final.mp4.

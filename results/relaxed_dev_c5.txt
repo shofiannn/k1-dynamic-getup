@@ -1,0 +1,9 @@
+== c5_s0 (dev, 30 posisi)
+ prone: ketat 0/30 | longgar(tilt<45) 27/30 | median waktu longgar 2.40 s
+supine: ketat 0/30 | longgar(tilt<45) 27/30 | median waktu longgar 1.45 s
+== c5_s1 (dev, 30 posisi)
+ prone: ketat 0/30 | longgar(tilt<45) 0/30 | median waktu longgar nan s
+supine: ketat 0/30 | longgar(tilt<45) 0/30 | median waktu longgar nan s
+== c5_s2 (dev, 30 posisi)
+ prone: ketat 25/30 | longgar(tilt<45) 25/30 | median waktu longgar 2.75 s
+supine: ketat 28/30 | longgar(tilt<45) 28/30 | median waktu longgar 1.50 s
