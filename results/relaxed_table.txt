@@ -1,0 +1,12 @@
+== final_s0
+ prone: ketat 0/100 | longgar(tilt<45) 0/100 | median waktu longgar nan s
+supine: ketat 0/100 | longgar(tilt<45) 0/100 | median waktu longgar nan s
+== c3_s0
+ prone: ketat 0/100 | longgar(tilt<45) 0/100 | median waktu longgar nan s
+supine: ketat 0/100 | longgar(tilt<45) 0/100 | median waktu longgar nan s
+== c4_s0
+ prone: ketat 0/100 | longgar(tilt<45) 0/100 | median waktu longgar nan s
+supine: ketat 0/100 | longgar(tilt<45) 0/100 | median waktu longgar nan s
+== c5_s0
+ prone: ketat 0/100 | longgar(tilt<45) 93/100 | median waktu longgar 2.40 s
+supine: ketat 0/100 | longgar(tilt<45) 77/100 | median waktu longgar 1.45 s
